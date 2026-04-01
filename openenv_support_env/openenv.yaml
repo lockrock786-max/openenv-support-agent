@@ -1,0 +1,25 @@
+name: support-ticket-openenv
+version: 0.1.0
+description: Deterministic support-ticket workflow environment for RL agents.
+entrypoint: app:app
+interface:
+  reset: support_env.SupportTicketEnv.reset
+  step: support_env.SupportTicketEnv.step
+  state: support_env.SupportTicketEnv.state
+action_schema: support_env.models.Action
+observation_schema: support_env.models.Observation
+reward_schema: support_env.models.Reward
+tasks:
+  - task_id: ticket_triage_easy
+    difficulty: easy
+    grader: support_env.graders.grade_easy
+  - task_id: ticket_triage_medium
+    difficulty: medium
+    grader: support_env.graders.grade_medium
+  - task_id: ticket_triage_hard
+    difficulty: hard
+    grader: support_env.graders.grade_hard
+metadata:
+  domain: customer_support
+  environment_type: workflow
+  deterministic: true

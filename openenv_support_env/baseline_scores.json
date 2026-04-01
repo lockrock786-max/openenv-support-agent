@@ -1,0 +1,143 @@
+{
+  "results": [
+    {
+      "task_id": "ticket_triage_easy",
+      "mode": "heuristic",
+      "env_score": 3.053475,
+      "grader_score": 1.0,
+      "details": {
+        "category": 1.0,
+        "priority": 1.0,
+        "route": 1.0
+      },
+      "actions": [
+        {
+          "category": "billing",
+          "priority": "high",
+          "route_to": "billing",
+          "response_type": "provide_solution",
+          "reply_text": "Thanks for reaching out. I will review the billing record, confirm the charge history, and help resolve the issue as quickly as possible.",
+          "close_ticket": false
+        },
+        {
+          "category": "account_access",
+          "priority": "urgent",
+          "route_to": "support",
+          "response_type": "ask_clarify",
+          "reply_text": "Thanks for the update. Please share one more detail so I can route the fastest fix path.",
+          "close_ticket": false
+        },
+        {
+          "category": "feature_request",
+          "priority": "low",
+          "route_to": "engineering",
+          "response_type": "acknowledge",
+          "reply_text": "Thanks for the suggestion. I have logged it for review by the product team.",
+          "close_ticket": true
+        },
+        {
+          "category": "security",
+          "priority": "urgent",
+          "route_to": "security",
+          "response_type": "escalate",
+          "reply_text": "Thank you for the report. I am escalating this to the relevant team for review and next steps.",
+          "close_ticket": false
+        }
+      ]
+    },
+    {
+      "task_id": "ticket_triage_medium",
+      "mode": "heuristic",
+      "env_score": 2.824966,
+      "grader_score": 0.925,
+      "details": {
+        "ticket_0": 0.85,
+        "ticket_1": 1.0,
+        "ticket_2": 1.0,
+        "ticket_3": 0.8500000000000001
+      },
+      "actions": [
+        {
+          "category": "billing",
+          "priority": "high",
+          "route_to": "billing",
+          "response_type": "provide_solution",
+          "reply_text": "Thanks for reaching out. I will review the billing record, confirm the charge history, and help resolve the issue as quickly as possible.",
+          "close_ticket": false
+        },
+        {
+          "category": "bug_report",
+          "priority": "high",
+          "route_to": "engineering",
+          "response_type": "escalate",
+          "reply_text": "Thank you for the report. I am escalating this to the relevant team for review and next steps.",
+          "close_ticket": false
+        },
+        {
+          "category": "cancellation",
+          "priority": "high",
+          "route_to": "retention",
+          "response_type": "offer_retention",
+          "reply_text": "I understand. I can help review the renewal options and keep the plan aligned with your needs.",
+          "close_ticket": false
+        },
+        {
+          "category": "security",
+          "priority": "urgent",
+          "route_to": "security",
+          "response_type": "escalate",
+          "reply_text": "Thank you for the report. I am escalating this to the relevant team for review and next steps.",
+          "close_ticket": false
+        }
+      ]
+    },
+    {
+      "task_id": "ticket_triage_hard",
+      "mode": "heuristic",
+      "env_score": 2.857,
+      "grader_score": 0.71,
+      "details": {
+        "ticket_0": 0.63,
+        "ticket_1": 0.7799999999999999,
+        "ticket_2": 0.6,
+        "ticket_3": 0.83
+      },
+      "actions": [
+        {
+          "category": "billing",
+          "priority": "high",
+          "route_to": "billing",
+          "response_type": "provide_solution",
+          "reply_text": "Thanks for reaching out. I will review the billing record, confirm the charge history, and help resolve the issue as quickly as possible.",
+          "close_ticket": false
+        },
+        {
+          "category": "account_access",
+          "priority": "urgent",
+          "route_to": "support",
+          "response_type": "ask_clarify",
+          "reply_text": "Thanks for the update. Please share one more detail so I can route the fastest fix path.",
+          "close_ticket": false
+        },
+        {
+          "category": "bug_report",
+          "priority": "urgent",
+          "route_to": "engineering",
+          "response_type": "escalate",
+          "reply_text": "Thank you for the report. I am escalating this to the relevant team for review and next steps.",
+          "close_ticket": false
+        },
+        {
+          "category": "cancellation",
+          "priority": "high",
+          "route_to": "retention",
+          "response_type": "offer_retention",
+          "reply_text": "I understand. I can help review the renewal options and keep the plan aligned with your needs.",
+          "close_ticket": false
+        }
+      ]
+    }
+  ],
+  "average_grader_score": 0.878333,
+  "average_env_score": 2.911814
+}
