@@ -1,0 +1,13 @@
+[project]
+name = "openenv-support-agent"
+version = "0.1.0"
+description = "OpenEnv Support Ticket Environment"
+authors = [{name = "Your Name"}]
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic"
+]
+
+[tool.openenv]
+entrypoint = "environment:SupportTicketEnv"
