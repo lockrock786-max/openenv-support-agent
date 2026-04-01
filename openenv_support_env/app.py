@@ -11,6 +11,31 @@ from support_env import SupportTicketEnv, TASKS, grade_task
 from baseline.run_agent import heuristic_action
 
 app = FastAPI(title="OpenEnv Support Ticket Environment")
+from environment import SupportTicketEnv
+from models import Action
+
+env = SupportTicketEnv()
+
+@app.post("/reset")
+def reset():
+    obs = env.reset()
+    return {"observation": obs}
+
+@app.post("/step")
+def step(action: dict):
+    action_obj = Action(**action)
+    obs, reward, done, info = env.step(action_obj)
+    
+    return {
+        "observation": obs,
+        "reward": reward.score,
+        "done": done,
+        "info": info
+    }
+
+@app.get("/state")
+def state():
+    return env.state()
 
 
 @app.get("/", response_class=HTMLResponse)
