@@ -86,4 +86,14 @@ def demo(task_id: str) -> dict:
         "details": grader.details,
         "actions": [a.model_dump() for a in actions],
     }
+def main():
+    return app
+
+
+
+
+    
+    
+    
+    
 
