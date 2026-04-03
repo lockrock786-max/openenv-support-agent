@@ -6,8 +6,12 @@ authors = [{name = "Your Name"}]
 dependencies = [
     "fastapi",
     "uvicorn",
-    "pydantic"
+    "pydantic",
+    "openenv>=0.2.0"
 ]
+
+[project.scripts]
+server = "app:main"
 
 [tool.openenv]
 entrypoint = "environment:SupportTicketEnv"
