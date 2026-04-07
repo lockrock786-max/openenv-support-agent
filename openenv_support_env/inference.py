@@ -1,3 +1,9 @@
+import sys
+import os
+
+sys.path.append(os.getcwd())
+sys.path.append(os.path.join(os.getcwd(), "openenv_support_env"))
+
 from support_env.environment import SupportTicketEnv, TASKS, grade_task
 
 MODEL_NAME = "baseline"
