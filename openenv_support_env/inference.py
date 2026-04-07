@@ -1,27 +1,55 @@
-from environment import SupportTicketEnv
-from models import Action
+from support_env.environment import SupportTicketEnv, TASKS, grade_task
 
-def run_inference():
-    env = SupportTicketEnv()
+MODEL_NAME = "baseline"
+BENCHMARK = "openenv_support"
+
+def run_task(task_id):
+    env = SupportTicketEnv(task_id=task_id)
     obs = env.reset()
-    
-    done = False
-    total_reward = 0
-    
-    while not done:
-        action = Action(
-            category="billing",
-            priority="high",
-            route_to="billing",
-            response_type="provide_solution",
-            reply_text="We will resolve your issue shortly.",
-            close_ticket=False
-        )
-        
-        obs, reward, done, _ = env.step(action)
-        total_reward += reward.score
 
-    print("Total Reward:", total_reward)
+    rewards = []
+    steps = 0
+
+    print(f"[START] task={task_id} env={BENCHMARK} model={MODEL_NAME}", flush=True)
+
+    done = False
+
+    try:
+        while not done:
+            action = {
+                "type": "classify",
+                "priority": "medium"
+            }
+
+            obs, reward, done, info = env.step(action)
+
+            steps += 1
+            reward = float(reward or 0.0)
+            rewards.append(reward)
+
+            print(
+                f"[STEP] step={steps} action={action} reward={reward:.2f} done={str(done).lower()} error=null",
+                flush=True
+            )
+
+    except Exception as e:
+        print(
+            f"[STEP] step={steps} action=error reward=0.00 done=true error={str(e)}",
+            flush=True
+        )
+        done = True
+
+    score = float(grade_task(task_id, env.state()))
+    success = score >= 0.5
+
+    rewards_str = ",".join(f"{r:.2f}" for r in rewards)
+
+    print(
+        f"[END] success={str(success).lower()} steps={steps} score={score:.2f} rewards={rewards_str}",
+        flush=True
+    )
+
 
 if __name__ == "__main__":
-    run_inference()
+    for task in TASKS:
+        run_task(task)
