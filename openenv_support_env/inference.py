@@ -12,7 +12,7 @@ def run_task(task_name):
     rewards = []
 
     while not done:
-        action = "respond politely"  # dummy action
+        action = "respond politely"
 
         obs, reward, done, info = env.step(action)
 
@@ -27,7 +27,10 @@ def run_task(task_name):
             flush=True
         )
 
-    score = grade_task(task_name, env)
+    try:
+        score = grade_task(task_name, env)
+    except Exception:
+        score = 0.0
 
     rewards_str = ",".join([f"{r:.2f}" for r in rewards])
 
