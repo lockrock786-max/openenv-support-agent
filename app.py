@@ -1,37 +1,35 @@
 from __future__ import annotations
 
-import json
-import os
-from pathlib import Path
-
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 
-from support_env import SupportTicketEnv, TASKS, grade_task
+from support_env.environment import SupportTicketEnv, TASKS, grade_task
+from support_env.models import Action
 from baseline.run_agent import heuristic_action
 
 app = FastAPI(title="OpenEnv Support Ticket Environment")
-from environment import SupportTicketEnv
-from models import Action
 
-env = SupportTicketEnv()
+env = SupportTicketEnv(task_name=list(TASKS.keys())[0])
+
 
 @app.post("/reset")
 def reset():
     obs = env.reset()
     return {"observation": obs}
 
+
 @app.post("/step")
 def step(action: dict):
     action_obj = Action(**action)
     obs, reward, done, info = env.step(action_obj)
-    
+
     return {
         "observation": obs,
         "reward": reward.score,
         "done": done,
         "info": info
     }
+
 
 @app.get("/state")
 def state():
@@ -46,13 +44,9 @@ def home() -> str:
     )
     return f"""
     <html>
-      <head><title>OpenEnv Support Ticket Environment</title></head>
-      <body style="font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; line-height: 1.5;">
+      <body>
         <h1>OpenEnv Support Ticket Environment</h1>
-        <p>A deterministic customer-support workflow environment for RL agents.</p>
-        <h2>Tasks</h2>
         <ul>{tasks_html}</ul>
-        <p>Use <code>/api/tasks</code> for JSON metadata and <code>/api/demo/&lt;task_id&gt;</code> for a live baseline rollout.</p>
       </body>
     </html>
     """
@@ -68,9 +62,10 @@ def demo(task_id: str) -> dict:
     if task_id not in TASKS:
         raise HTTPException(status_code=404, detail="Unknown task_id")
 
-    env = SupportTicketEnv(task_id=task_id)
+    env = SupportTicketEnv(task_name=task_id)
     obs = env.reset()
     actions = []
+
     while True:
         action = heuristic_action(obs)
         actions.append(action)
@@ -79,6 +74,7 @@ def demo(task_id: str) -> dict:
             break
 
     grader = grade_task(task_id, actions)
+
     return {
         "task_id": task_id,
         "env_score": env.state().cumulative_score,
@@ -86,14 +82,7 @@ def demo(task_id: str) -> dict:
         "details": grader.details,
         "actions": [a.model_dump() for a in actions],
     }
+
+
 def main():
     return app
-
-
-
-
-    
-    
-    
-    
-
