@@ -1,5 +1,6 @@
 import os
-from support_env.environment import SupportTicketEnv, TASKS, grade_task
+from support_env.environment import SupportTicketEnv, TASKS
+from support_env.graders import grade_task
 
 def run_task(task_name):
     env = SupportTicketEnv(task_name)
