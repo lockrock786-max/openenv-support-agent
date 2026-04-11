@@ -1,10 +1,11 @@
 import os
 from support_env.environment import SupportTicketEnv, TASKS
-from support_env.graders import grade_task
+from support_env.grader import grade_task   # ✅ correct import
+
 
 def run_task(task_name):
     env = SupportTicketEnv(task_name)
-    
+
     print(f"[START] task={task_name} env=support_ticket model=dummy", flush=True)
 
     obs = env.reset()
@@ -13,7 +14,11 @@ def run_task(task_name):
     rewards = []
 
     while not done:
-        action = "respond politely"
+        # ✅ SAFE ACTION FORMAT (matches most models.py)
+        action = {
+            "action_type": "respond",
+            "response": "Thank you for reaching out. We are working on your issue."
+        }
 
         obs, reward, done, info = env.step(action)
 
@@ -28,15 +33,13 @@ def run_task(task_name):
             flush=True
         )
 
-    try:
-        score = grade_task(task_name, env)
-    except Exception:
-        score = 0.0
+    # ✅ correct grading call
+    result = grade_task(task_name, env)
 
     rewards_str = ",".join([f"{r:.2f}" for r in rewards])
 
     print(
-        f"[END] success=true steps={step_count} score={score:.2f} rewards={rewards_str}",
+        f"[END] success=true steps={step_count} score={result.score:.2f} rewards={rewards_str}",
         flush=True
     )
 
