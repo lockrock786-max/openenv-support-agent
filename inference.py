@@ -1,6 +1,8 @@
 import os
+
 from support_env.environment import SupportTicketEnv, TASKS
-from support_env.graders import grade_task 
+from support_env.graders import grade_task
+from support_env.models import Action   # ✅ IMPORTANT
 
 
 def run_task(task_name):
@@ -14,11 +16,11 @@ def run_task(task_name):
     rewards = []
 
     while not done:
-        # ✅ SAFE ACTION FORMAT (matches most models.py)
-        action = {
-            "action_type": "respond",
-            "response": "Thank you for reaching out. We are working on your issue."
-        }
+        # ✅ FINAL FIX: use Action object (NOT dict, NOT string)
+        action = Action(
+            action_type="respond",
+            response="Thank you for reaching out. We will resolve your issue."
+        )
 
         obs, reward, done, info = env.step(action)
 
@@ -33,7 +35,7 @@ def run_task(task_name):
             flush=True
         )
 
-    # ✅ correct grading call
+    # ✅ correct grading
     result = grade_task(task_name, env)
 
     rewards_str = ",".join([f"{r:.2f}" for r in rewards])
